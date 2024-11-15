@@ -36,20 +36,18 @@ func main() {
 		fmt.Println("Error accepting connection: ", err.Error())
 		os.Exit(1)
 	}
-	
+
 	go func() {
-		for {
-			buf := make([]byte, 128)
-			_, err := conn.Read(buf)
-			if err != nil {
-				fmt.Println("Error read request: ", err.Error())
-				os.Exit(1)
-			}
-			_, err = conn.Write([]byte("+PONG\r\n"))
-			if err != nil {
-				fmt.Println("Error write response: ", err.Error())
-				os.Exit(1)
-			}
+		buf := make([]byte, 128)
+		_, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("Error read request: ", err.Error())
+			os.Exit(1)
+		}
+		_, err = conn.Write([]byte("+PONG\r\n"))
+		if err != nil {
+			fmt.Println("Error write response: ", err.Error())
+			os.Exit(1)
 		}
 	}()
 }
