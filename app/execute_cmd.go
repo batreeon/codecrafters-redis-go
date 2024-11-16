@@ -30,13 +30,25 @@ func output(cmds []string) ([]string, []byte, error) {
 	switch cmds[0] {
 	case "PING":
 		{
+			if len(cmds) > 1 {
+				cmds = cmds[1:]
+			} else if len(cmds) == 1 {
+				cmds = []string{}
+			}
 			return cmds, []byte(fmt.Sprintf(simpleStrings, "PONG")), nil
 		}
 	case "ECHO":
 		if len(cmds) < 2 {
 			return cmds, nil, errors.New("Error ECHO parameter missing")
 		}
-		return cmds, []byte(fmt.Sprintf(bulkStrings, len(cmds), cmds[1])), nil
+
+		result := []byte(fmt.Sprintf(bulkStrings, len(cmds[1]), cmds[1]))
+		if len(cmds) > 2 {
+			cmds = cmds[2:]
+		} else if len(cmds) == 2 {
+			cmds = []string{}
+		}
+		return cmds, result, nil
 	}
 	return cmds, nil, errors.ErrUnsupported
 }
