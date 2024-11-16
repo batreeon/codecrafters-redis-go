@@ -33,12 +33,14 @@ func main() {
 					return // return when one connection handler completed
 				}
 
+				fmt.Println(string(buf))
 				cmds, err := ParserInput(buf)
 				if err != nil {
 					fmt.Println("Error parse input: ", err.Error())
 					os.Exit(1)
 				}
 
+				fmt.Println(cmds)
 				err = executeCmd(conn, cmds)
 				if err != nil {
 					fmt.Println("Error execute cmds: ", err.Error())
