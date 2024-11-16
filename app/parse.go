@@ -14,6 +14,7 @@ const (
 )
 
 func ParserInput(bs []byte) ([]string, error) {
+	fmt.Println("11 ",string(bs))
 	result := []string{}
 	for len(bs) > 0 {
 		var eles []string
