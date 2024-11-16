@@ -32,9 +32,16 @@ func main() {
 					fmt.Println("Error read request: ", err.Error())
 					return // return when one connection handler completed
 				}
-				_, err = conn.Write([]byte("+PONG\r\n"))
+
+				cmds, err := ParserInput(buf)
 				if err != nil {
-					fmt.Println("Error write response: ", err.Error())
+					fmt.Println("Error parse input: ", err.Error())
+					os.Exit(1)
+				}
+
+				err = executeCmd(conn, cmds)
+				if err != nil {
+					fmt.Println("Error execute cmds: ", err.Error())
 					os.Exit(1)
 				}
 			}
