@@ -1,12 +1,14 @@
-package main
+package execute
 
 import (
 	"errors"
 	"fmt"
 	"net"
+
+	"github.com/codecrafters-io/redis-starter-go/constant"
 )
 
-func executeCmd(conn net.Conn, cmds []string) error {
+func ExecuteCmd(conn net.Conn, cmds []string) error {
 	if len(cmds) == 0 {
 		return nil
 	}
@@ -36,14 +38,14 @@ func output(cmds []string) ([]string, []byte, error) {
 			} else if len(cmds) == 1 {
 				cmds = []string{}
 			}
-			return cmds, []byte(fmt.Sprintf(simpleStrings, "PONG")), nil
+			return cmds, []byte(fmt.Sprintf(constant.SimpleStrings, "PONG")), nil
 		}
 	case "ECHO":
 		if len(cmds) < 2 {
 			return cmds, nil, errors.New("Error ECHO parameter missing")
 		}
 
-		result := []byte(fmt.Sprintf(bulkStrings, len(cmds[1]), cmds[1]))
+		result := []byte(fmt.Sprintf(constant.BulkStrings, len(cmds[1]), cmds[1]))
 		if len(cmds) > 2 {
 			cmds = cmds[2:]
 		} else if len(cmds) == 2 {

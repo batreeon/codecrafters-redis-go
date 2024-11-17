@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"fmt"
@@ -6,15 +6,8 @@ import (
 	"github.com/codecrafters-io/redis-starter-go/constant"
 )
 
-const (
-	simpleStrings    = "+%s\r\n"
-	bulkStrings      = "$%d\r\n%s\r\n"
-	emptyBulkStrings = "$%d\r\n\r\n"
-	arrays           = "*%d\r\n"
-)
-
 func ParserInput(bs []byte) ([]string, error) {
-	fmt.Println("11 ",string(bs))
+	fmt.Println("11 ", string(bs))
 	result := []string{}
 	for len(bs) > 0 {
 		var eles []string
@@ -39,12 +32,12 @@ func parseRESPDataType(bs []byte) ([]byte, []string, error) {
 	case '+':
 		{
 			var ele string
-			_, err := fmt.Sscanf(string(bs), simpleStrings, &ele)
+			_, err := fmt.Sscanf(string(bs), constant.SimpleStrings, &ele)
 			if err != nil {
 				return bs, nil, err
 			}
 
-			pl := parsedLength(simpleStrings, ele)
+			pl := parsedLength(constant.SimpleStrings, ele)
 			if len(bs) > pl {
 				bs = bs[pl:]
 			} else {
@@ -58,19 +51,19 @@ func parseRESPDataType(bs []byte) ([]byte, []string, error) {
 		{
 			// parse the lenth, first
 			var elelen int
-			_, err := fmt.Sscanf(string(bs), bulkStrings[:3], &elelen)
+			_, err := fmt.Sscanf(string(bs), constant.BulkStrings[:3], &elelen)
 			if err != nil {
-				return bs, nil,err
+				return bs, nil, err
 			}
 
 			var ele string
 			var pattern string
 			if elelen == 0 {
-				_, err = fmt.Sscanf(string(bs), emptyBulkStrings, &elelen)
-				pattern = emptyBulkStrings
+				_, err = fmt.Sscanf(string(bs), constant.EmptyBulkStrings, &elelen)
+				pattern = constant.EmptyBulkStrings
 			} else if elelen > 0 {
-				_, err = fmt.Sscanf(string(bs), bulkStrings, &elelen, &ele)
-				pattern = bulkStrings
+				_, err = fmt.Sscanf(string(bs), constant.BulkStrings, &elelen, &ele)
+				pattern = constant.BulkStrings
 			} else {
 				return bs, nil, constant.ErrInvaildInput
 			}
@@ -95,11 +88,11 @@ func parseRESPDataType(bs []byte) ([]byte, []string, error) {
 	case '*':
 		{
 			var n int
-			_, err := fmt.Sscanf(string(bs), arrays, &n)
+			_, err := fmt.Sscanf(string(bs), constant.Arrays, &n)
 			if err != nil {
 				return bs, nil, err
 			}
-			pl := parsedLength(arrays, n)
+			pl := parsedLength(constant.Arrays, n)
 			if len(bs) > pl {
 				bs = bs[pl:]
 			} else {
@@ -117,6 +110,8 @@ func parseRESPDataType(bs []byte) ([]byte, []string, error) {
 			}
 			return bs, result, nil
 		}
+	case '\n':
+		return []byte{}, result, nil
 	}
 	return bs, nil, constant.ErrInvaildInput
 }

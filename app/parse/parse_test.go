@@ -1,8 +1,10 @@
-package main
+package parse
 
 import (
 	"reflect"
 	"testing"
+
+	"github.com/codecrafters-io/redis-starter-go/constant"
 )
 
 func TestParserInput(t *testing.T) {
@@ -56,11 +58,19 @@ func TestParserInput(t *testing.T) {
 			false,
 		},
 		{
-			"4",
+			"5",
 			args{
 				bs: []byte("*2\r\n$4\r\nECHO\r\n$3\r\nhey\r\n"),
 			},
 			[]string{"ECHO", "hey"},
+			false,
+		},
+		{
+			"6",
+			args{
+				bs: []byte("*2\r\n$4\r\nECHO\r\n$9\r\nraspberry\r\n"),
+			},
+			[]string{"ECHO", "raspberry"},
 			false,
 		},
 	}
@@ -91,16 +101,16 @@ func Test_parsedLength(t *testing.T) {
 		{
 			"0",
 			args{
-				pattern: simpleStrings,
-				v: []any{"hello"},
+				pattern: constant.SimpleStrings,
+				v:       []any{"hello"},
 			},
 			8,
 		},
 		{
 			"1",
 			args{
-				pattern: bulkStrings,
-				v: []any{15, "helloworldhello"},
+				pattern: constant.BulkStrings,
+				v:       []any{15, "helloworldhello"},
 			},
 			22,
 		},

@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"net"
 	"os"
+
+	"github.com/codecrafters-io/redis-starter-go/app/execute"
+	"github.com/codecrafters-io/redis-starter-go/app/parse"
 )
 
 func main() {
@@ -26,22 +29,22 @@ func main() {
 		go func() {
 			defer conn.Close()
 			for { // handle multiple commands in the same connection
-				buf := make([]byte, 128)
-				_, err := conn.Read(buf)
+				buf := make([]byte, 1024)
+				n, err := conn.Read(buf)
 				if err != nil {
 					fmt.Println("Error read request: ", err.Error())
 					return // return when one connection handler completed
 				}
 
-				fmt.Println("1 ",string(buf))
-				cmds, err := ParserInput(buf)
+				fmt.Println("1 ", string(buf))
+				cmds, err := parse.ParserInput(buf[:n])
 				fmt.Println("2 ", cmds)
 				if err != nil {
 					fmt.Println("Error parse input: ", err.Error())
 					os.Exit(1)
 				}
 
-				err = executeCmd(conn, cmds)
+				err = execute.ExecuteCmd(conn, cmds)
 				if err != nil {
 					fmt.Println("Error execute cmds: ", err.Error())
 					os.Exit(1)
