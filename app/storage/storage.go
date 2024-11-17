@@ -18,11 +18,14 @@ func SetWithExpire(k, v string, expire time.Duration) {
 	set(k, v)
 	if expire > 0 {
 		expireAt[k] = time.Now().Add(expire)
+		fmt.Println("set k: ", k, " expire: ", expire, " now: ", time.Now(), " expireAt: ", expireAt[k])
 	}
 }
 
 func Get(k string) string {
 	if isExpired(k) {
+		delete(db, k)
+		delete(expireAt, k)
 		return constant.NullBulkStrings
 	}
 	v, ok := db[k]
@@ -34,7 +37,7 @@ func Get(k string) string {
 
 func isExpired(k string) bool {
 	ea, ok := expireAt[k]
-	fmt.Println("k: ", k, " expireAt ", ea, " now ", time.Now())
+	fmt.Println("get k: ", k, " expireAt: ", ea, " now: ", time.Now())
 	if !ok {
 		return false
 	}
