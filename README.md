@@ -35,5 +35,5 @@ Note: This section is for stages 2 and beyond.
 # test
 
 ```sh
-echo "*2\r\n$4\r\nECHO\r\n$9\r\nraspberry\r\n" | nc 0.0.0.0 6379
+echo '*2\r\n$4\r\nECHO\r\n$9\r\nraspberry\r\n' | nc 0.0.0.0 6379
 ```
