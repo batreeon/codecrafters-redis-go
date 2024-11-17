@@ -38,7 +38,7 @@ func main() {
 
 				fmt.Println("1 ", string(buf))
 				cmds, err := parse.ParserInput(buf[:n])
-				fmt.Println("2 ", cmds)
+				fmt.Println("2", cmds)
 				if err != nil {
 					fmt.Println("Error parse input: ", err.Error())
 					os.Exit(1)
