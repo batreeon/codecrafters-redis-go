@@ -64,7 +64,7 @@ func getExecutor(cmds []string) ([]string, []byte, error) {
 	}
 
 	k := cmds[1]
-	resp := []byte(storage.Get(k))
+	resp := buildBulkStrings(storage.Get(k))
 	cmds = util.RemoveFirstNElements(cmds, 2)
 	return cmds, resp, nil
 }
