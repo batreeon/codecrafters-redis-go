@@ -4,8 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net"
-
-	"github.com/codecrafters-io/redis-starter-go/constant"
 )
 
 func ExecuteCmd(conn net.Conn, cmds []string) error {
