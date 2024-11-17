@@ -2,6 +2,7 @@ package parse
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/codecrafters-io/redis-starter-go/constant"
 )
@@ -44,7 +45,7 @@ func parseRESPDataType(bs []byte) ([]byte, []string, error) {
 				bs = []byte{}
 			}
 
-			result = append(result, ele)
+			result = append(result, strings.ToLower(ele))
 			return bs, result, nil
 		}
 	case '$':
@@ -82,7 +83,7 @@ func parseRESPDataType(bs []byte) ([]byte, []string, error) {
 				bs = []byte{}
 			}
 
-			result = append(result, ele)
+			result = append(result, strings.ToLower(ele))
 			return bs, result, nil
 		}
 	case '*':

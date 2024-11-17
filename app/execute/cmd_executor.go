@@ -2,6 +2,8 @@ package execute
 
 import (
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/codecrafters-io/redis-starter-go/app/storage"
 	"github.com/codecrafters-io/redis-starter-go/constant"
@@ -11,18 +13,18 @@ import (
 type cmdExecutor func(cmds []string) ([]string, []byte, error)
 
 var cmdExecutorMap = map[string]cmdExecutor{
-	"PING": PINGExecutor,
-	"ECHO": ECHOExecutor,
-	"SET":  SETEXecutor,
-	"GET":  GETEXecutor,
+	"ping": pingExecutor,
+	"echo": echoExecutor,
+	"set":  setExecutor,
+	"get":  getExecutor,
 }
 
-func PINGExecutor(cmds []string) ([]string, []byte, error) {
+func pingExecutor(cmds []string) ([]string, []byte, error) {
 	cmds = util.RemoveFirstNElements(cmds, 1)
 	return cmds, []byte(fmt.Sprintf(constant.SimpleStrings, "PONG")), nil
 }
 
-func ECHOExecutor(cmds []string) ([]string, []byte, error) {
+func echoExecutor(cmds []string) ([]string, []byte, error) {
 	if len(cmds) < 2 {
 		return cmds, nil, constant.ErrParameterMissing
 	}
@@ -32,38 +34,41 @@ func ECHOExecutor(cmds []string) ([]string, []byte, error) {
 	return cmds, resp, nil
 }
 
-func SETEXecutor(cmds []string) ([]string, []byte, error) {
+func setExecutor(cmds []string) ([]string, []byte, error) {
 	if len(cmds) < 3 {
 		return cmds, nil, constant.ErrParameterMissing
 	}
 
+	var expireTime time.Duration
+	if len(cmds) < 5 && cmds[3] == "px" {
+		expire, err := strconv.Atoi(cmds[4])
+		if err != nil {
+			return cmds, nil, err
+		}
+		expireTime = time.Duration(expire) * time.Microsecond
+		cmds = util.RemoveFirstNElements(cmds, 5)
+	} else {
+		cmds = util.RemoveFirstNElements(cmds, 3)
+	}
+
 	k := cmds[1]
 	v := cmds[2]
-	storage.M[k] = v
+	storage.SetWithExpire(k, v, expireTime)
 
 	resp := buildBulkStrings("OK")
-	cmds = util.RemoveFirstNElements(cmds, 3)
 	return cmds, resp, nil
 }
 
-func GETEXecutor(cmds []string) ([]string, []byte, error) {
+func getExecutor(cmds []string) ([]string, []byte, error) {
 	if len(cmds) < 2 {
 		return cmds, nil, constant.ErrParameterMissing
 	}
 
 	k := cmds[1]
-	v, ok := storage.M[k]
-	var resp []byte
-	if !ok {
-		resp = []byte(constant.NullBulkStrings)
-	} else {
-		resp = buildBulkStrings(v)
-	}
-
+	resp := []byte(storage.Get(k))
 	cmds = util.RemoveFirstNElements(cmds, 2)
 	return cmds, resp, nil
 }
-
 
 func buildBulkStrings(s string) []byte {
 	return []byte(fmt.Sprintf(constant.BulkStrings, len(s), s))
