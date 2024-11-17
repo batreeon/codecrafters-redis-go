@@ -42,7 +42,7 @@ func setExecutor(cmds []string) ([]string, []byte, error) {
 	k := cmds[1]
 	v := cmds[2]
 	var expireTime time.Duration
-	if len(cmds) < 5 && cmds[3] == "px" {
+	if len(cmds) >= 5 && cmds[3] == "px" {
 		expire, err := strconv.Atoi(cmds[4])
 		if err != nil {
 			return cmds, nil, err
