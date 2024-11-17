@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/codecrafters-io/redis-starter-go/constant"
@@ -31,8 +32,9 @@ func Get(k string) string {
 	return v
 }
 
-func isExpired(s string) bool {
-	ea, ok := expireAt[s]
+func isExpired(k string) bool {
+	ea, ok := expireAt[k]
+	fmt.Println("k: ", k, " expireAt ", ea)
 	if !ok {
 		return false
 	}
