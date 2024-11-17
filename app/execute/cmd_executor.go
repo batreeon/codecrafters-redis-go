@@ -47,7 +47,7 @@ func setExecutor(cmds []string) ([]string, []byte, error) {
 		if err != nil {
 			return cmds, nil, err
 		}
-		expireTime = time.Duration(expire) * time.Microsecond
+		expireTime = time.Duration(expire) * time.Millisecond
 		cmds = util.RemoveFirstNElements(cmds, 5)
 	} else {
 		cmds = util.RemoveFirstNElements(cmds, 3)
