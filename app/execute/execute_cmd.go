@@ -13,14 +13,14 @@ func ExecuteCmd(conn net.Conn, cmds []string) error {
 		return nil
 	}
 	for len(cmds) > 0 {
-		var o []byte
+		var resp []byte
 		var err error
-		cmds, o, err = output(cmds)
+		cmds, resp, err = output(cmds)
 		if err != nil {
 			return err
 		}
-		fmt.Println("3 ", o)
-		_, err = conn.Write(o)
+		fmt.Println("3 ", resp)
+		_, err = conn.Write(resp)
 		if err != nil {
 			return err
 		}
@@ -30,28 +30,9 @@ func ExecuteCmd(conn net.Conn, cmds []string) error {
 }
 
 func output(cmds []string) ([]string, []byte, error) {
-	switch cmds[0] {
-	case "PING":
-		{
-			if len(cmds) > 1 {
-				cmds = cmds[1:]
-			} else if len(cmds) == 1 {
-				cmds = []string{}
-			}
-			return cmds, []byte(fmt.Sprintf(constant.SimpleStrings, "PONG")), nil
-		}
-	case "ECHO":
-		if len(cmds) < 2 {
-			return cmds, nil, errors.New("Error ECHO parameter missing")
-		}
-
-		result := []byte(fmt.Sprintf(constant.BulkStrings, len(cmds[1]), cmds[1]))
-		if len(cmds) > 2 {
-			cmds = cmds[2:]
-		} else if len(cmds) == 2 {
-			cmds = []string{}
-		}
-		return cmds, result, nil
+	executor, ok := cmdExecutorMap[cmds[0]]
+	if !ok {
+		return cmds, nil, errors.ErrUnsupported
 	}
-	return cmds, nil, errors.ErrUnsupported
+	return executor(cmds)
 }
