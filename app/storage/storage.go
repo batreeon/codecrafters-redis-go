@@ -34,7 +34,7 @@ func Get(k string) string {
 
 func isExpired(k string) bool {
 	ea, ok := expireAt[k]
-	fmt.Println("k: ", k, " expireAt ", ea)
+	fmt.Println("k: ", k, " expireAt ", ea, " now ", time.Now())
 	if !ok {
 		return false
 	}
