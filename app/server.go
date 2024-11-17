@@ -35,13 +35,14 @@ func main() {
 					fmt.Println("Error read request: ", err.Error())
 					return // return when one connection handler completed
 				}
+				fmt.Printf("input %q\n", buf[:n])
 
 				cmds, err := parse.ParserInput(buf[:n])
-				fmt.Println("input: ", cmds)
 				if err != nil {
 					fmt.Println("Error parse input: ", err.Error())
 					os.Exit(1)
 				}
+				fmt.Printf("parsed input: %q\n", cmds)
 
 				err = execute.ExecuteCmd(conn, cmds)
 				if err != nil {

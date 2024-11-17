@@ -17,7 +17,7 @@ func ExecuteCmd(conn net.Conn, cmds []string) error {
 		if err != nil {
 			return err
 		}
-		fmt.Println("output: ", string(resp))
+		fmt.Printf("output: %q\n", string(resp))
 		_, err = conn.Write(resp)
 		if err != nil {
 			return err

@@ -39,7 +39,6 @@ func setExecutor(cmds []string) ([]string, []byte, error) {
 		return cmds, nil, constant.ErrParameterMissing
 	}
 
-
 	k := cmds[1]
 	v := cmds[2]
 	var expireTime time.Duration
