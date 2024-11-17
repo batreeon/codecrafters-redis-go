@@ -36,9 +36,8 @@ func main() {
 					return // return when one connection handler completed
 				}
 
-				fmt.Println("1 ", string(buf))
 				cmds, err := parse.ParserInput(buf[:n])
-				fmt.Println("2", cmds)
+				fmt.Println("input: ", cmds)
 				if err != nil {
 					fmt.Println("Error parse input: ", err.Error())
 					os.Exit(1)
