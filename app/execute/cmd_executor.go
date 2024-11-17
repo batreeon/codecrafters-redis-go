@@ -39,6 +39,9 @@ func setExecutor(cmds []string) ([]string, []byte, error) {
 		return cmds, nil, constant.ErrParameterMissing
 	}
 
+
+	k := cmds[1]
+	v := cmds[2]
 	var expireTime time.Duration
 	if len(cmds) < 5 && cmds[3] == "px" {
 		expire, err := strconv.Atoi(cmds[4])
@@ -50,9 +53,6 @@ func setExecutor(cmds []string) ([]string, []byte, error) {
 	} else {
 		cmds = util.RemoveFirstNElements(cmds, 3)
 	}
-
-	k := cmds[1]
-	v := cmds[2]
 	storage.SetWithExpire(k, v, expireTime)
 
 	resp := buildBulkStrings("OK")
