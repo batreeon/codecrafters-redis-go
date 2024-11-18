@@ -25,6 +25,15 @@ func buildBulkStrings(s string) []byte {
 	return []byte(fmt.Sprintf(constant.BulkStrings, len(s), s))
 }
 
+func buildArrays(s []string) []byte {
+	head := fmt.Sprintf(constant.Arrays, len(s))
+	var elements []byte
+	for _, ss := range s[1:] {
+		elements = append(elements, buildBulkStrings(ss)...)
+	}
+	return append([]byte(head), elements...)
+}
+
 func pingExecutor(cmds []string) ([]string, []byte, error) {
 	cmds = util.RemoveFirstNElements(cmds, 1)
 	return cmds, []byte(fmt.Sprintf(constant.SimpleStrings, "PONG")), nil
@@ -88,7 +97,7 @@ func configExecutor(cmds []string) ([]string, []byte, error) {
 	if cmds[1] == "get" {
 		configKey := cmds[2]
 		configValue := config.GetConfig(configKey)
-		resp := buildBulkStrings(configValue)
+		resp := buildArrays([]string{configKey, configValue})
 		cmds = util.RemoveFirstNElements(cmds, 3)
 		return cmds, resp, nil
 	}
