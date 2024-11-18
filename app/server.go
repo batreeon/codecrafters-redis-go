@@ -13,7 +13,7 @@ import (
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Println("Logs from your program will appear here!")
-
+	fmt.Println("cmd augs: ", os.Args)
 	config.SetConfigs()
 
 	l, err := net.Listen("tcp", "0.0.0.0:6379")
