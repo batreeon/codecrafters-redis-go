@@ -2,8 +2,6 @@ package config
 
 import (
 	"flag"
-	"fmt"
-	"os"
 )
 
 var Configs = map[string]string{}
