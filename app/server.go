@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 
+	"github.com/codecrafters-io/redis-starter-go/app/config"
 	"github.com/codecrafters-io/redis-starter-go/app/execute"
 	"github.com/codecrafters-io/redis-starter-go/app/parse"
 )
@@ -12,6 +13,8 @@ import (
 func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Println("Logs from your program will appear here!")
+
+	config.SetConfigs()
 
 	l, err := net.Listen("tcp", "0.0.0.0:6379")
 	if err != nil {

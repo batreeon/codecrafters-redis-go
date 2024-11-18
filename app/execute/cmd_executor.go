@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/codecrafters-io/redis-starter-go/app/config"
 	"github.com/codecrafters-io/redis-starter-go/app/storage"
 	"github.com/codecrafters-io/redis-starter-go/constant"
 	"github.com/codecrafters-io/redis-starter-go/util"
@@ -13,10 +14,15 @@ import (
 type cmdExecutor func(cmds []string) ([]string, []byte, error)
 
 var cmdExecutorMap = map[string]cmdExecutor{
-	"ping": pingExecutor,
-	"echo": echoExecutor,
-	"set":  setExecutor,
-	"get":  getExecutor,
+	"ping":   pingExecutor,
+	"echo":   echoExecutor,
+	"set":    setExecutor,
+	"get":    getExecutor,
+	"config": configExecutor,
+}
+
+func buildBulkStrings(s string) []byte {
+	return []byte(fmt.Sprintf(constant.BulkStrings, len(s), s))
 }
 
 func pingExecutor(cmds []string) ([]string, []byte, error) {
@@ -75,6 +81,16 @@ func getExecutor(cmds []string) ([]string, []byte, error) {
 	return cmds, resp, nil
 }
 
-func buildBulkStrings(s string) []byte {
-	return []byte(fmt.Sprintf(constant.BulkStrings, len(s), s))
+func configExecutor(cmds []string) ([]string, []byte, error) {
+	if len(cmds) < 3 {
+		return cmds, nil, constant.ErrParameterMissing
+	}
+	if cmds[1] == "get" {
+		configKey := cmds[2]
+		configValue := config.GetConfig(configKey)
+		resp := buildBulkStrings(configValue)
+		cmds = util.RemoveFirstNElements(cmds, 3)
+		return cmds, resp, nil
+	}
+	return cmds, nil, constant.ErrInvaildInput
 }
