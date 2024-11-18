@@ -28,7 +28,7 @@ func buildBulkStrings(s string) []byte {
 func buildArrays(s []string) []byte {
 	head := fmt.Sprintf(constant.Arrays, len(s))
 	var elements []byte
-	for _, ss := range s[1:] {
+	for _, ss := range s {
 		elements = append(elements, buildBulkStrings(ss)...)
 	}
 	return append([]byte(head), elements...)
