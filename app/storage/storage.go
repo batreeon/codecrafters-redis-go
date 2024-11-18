@@ -10,12 +10,8 @@ import (
 var db = map[string]string{}
 var expireAt = map[string]time.Time{}
 
-func set(k, v string) {
-	db[k] = v
-}
-
 func SetWithExpire(k, v string, expire time.Duration) {
-	set(k, v)
+	db[k] = v
 	if expire > 0 {
 		expireAt[k] = time.Now().Add(expire)
 		fmt.Println("set k: ", k, " expire: ", expire, " now: ", time.Now(), " expireAt: ", expireAt[k])
