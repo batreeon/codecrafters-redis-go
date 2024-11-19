@@ -31,6 +31,14 @@ func Get(k string) string {
 	return v
 }
 
+func Keys() []string {
+	var keys []string
+	for k := range db {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
 func isExpired(k string) bool {
 	ea, ok := expireAt[k]
 	fmt.Println("get k: ", k, " expireAt: ", ea, " now: ", time.Now())

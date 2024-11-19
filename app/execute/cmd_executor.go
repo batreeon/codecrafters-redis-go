@@ -19,6 +19,7 @@ var cmdExecutorMap = map[string]cmdExecutor{
 	"set":    setExecutor,
 	"get":    getExecutor,
 	"config": configExecutor,
+	"keys":   keysExecutor,
 }
 
 func buildBulkStrings(s string) []byte {
@@ -101,5 +102,20 @@ func configExecutor(cmds []string) ([]string, []byte, error) {
 		cmds = util.RemoveFirstNElements(cmds, 3)
 		return cmds, resp, nil
 	}
+	return cmds, nil, constant.ErrInvaildInput
+}
+
+func keysExecutor(cmds []string) ([]string, []byte, error) {
+	if len(cmds) < 2 {
+		return cmds, nil, constant.ErrParameterMissing
+	}
+
+	if cmds[1] == "*" {
+		keys := storage.Keys()
+		resp := buildArrays(keys)
+		cmds = util.RemoveFirstNElements(cmds, 2)
+		return cmds, resp, nil
+	}
+
 	return cmds, nil, constant.ErrInvaildInput
 }
