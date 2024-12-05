@@ -32,7 +32,7 @@ Note: This section is for stages 2 and beyond.
 1. Commit your changes and run `git push origin master` to submit your solution
    to CodeCrafters. Test output will be streamed to your terminal.
 
-# test
+# Test
 
 ```sh
 echo '*2\r\n$4\r\nECHO\r\n$9\r\nraspberry\r\n' | nc 0.0.0.0 6379
@@ -41,11 +41,13 @@ echo '*2\r\n$4\r\nECHO\r\n$9\r\nraspberry\r\n' | nc 0.0.0.0 6379
 # 在Docker中运行redis
 
 运行redis容器：
+
 ```sh
 docker run --name <your_docker_name> -p 6379:6379 -d redis
 ```
 
 redis客户端连接redis服务端，添加数据并生成rdb文件：
+
 ```sh
 docker exec -it <your_docker_id or your_docker_name> redis-cli
 
@@ -53,15 +55,21 @@ docker exec -it <your_docker_id or your_docker_name> redis-cli
 set hello world
 save
 ```
+
 将容器中的rdb文件导出：
+
 ```sh
 docker cp <your_docker_id or your_docker_name>:/data/dump.rdb <your_local_path>
 ```
+
 查看rdb文件内容:
+
 ```sh
 hexdump -C <your_local_path>/dump.rdb
 ```
+
 文件内容输出：
+
 ```sh
 00000000  52 45 44 49 53 30 30 31  32 fa 09 72 65 64 69 73  |REDIS0012..redis|
 00000010  2d 76 65 72 05 37 2e 34  2e 31 fa 0a 72 65 64 69  |-ver.7.4.1..redi|
