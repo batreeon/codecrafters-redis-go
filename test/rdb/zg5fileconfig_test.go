@@ -19,12 +19,12 @@ func TestConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			go test.TestServer(t)
-
 			// 使用 mockArgs 来替换 os.Args
 			oldArgs := os.Args
 			os.Args = tt.CmdArgs
 			defer func() { os.Args = oldArgs }()
+
+			go test.TestServer(t)
 
 			// waiting server start up
 			time.Sleep(1 * time.Second)
