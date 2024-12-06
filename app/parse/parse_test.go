@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/codecrafters-io/redis-starter-go/constant"
+	"github.com/batreeon/codecrafters-redis-go/constant"
 )
 
 func TestParserInput(t *testing.T) {

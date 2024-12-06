@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/codecrafters-io/redis-starter-go/constant"
+	"github.com/batreeon/codecrafters-redis-go/constant"
 )
 
 var db = map[string]string{}

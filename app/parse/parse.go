@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/codecrafters-io/redis-starter-go/constant"
+	"github.com/batreeon/codecrafters-redis-go/constant"
 )
 
 func ParserInput(bs []byte) ([]string, error) {

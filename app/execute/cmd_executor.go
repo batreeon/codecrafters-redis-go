@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/codecrafters-io/redis-starter-go/app/config"
-	"github.com/codecrafters-io/redis-starter-go/app/storage"
-	"github.com/codecrafters-io/redis-starter-go/constant"
-	"github.com/codecrafters-io/redis-starter-go/util"
+	"github.com/batreeon/codecrafters-redis-go/app/config"
+	"github.com/batreeon/codecrafters-redis-go/app/storage"
+	"github.com/batreeon/codecrafters-redis-go/constant"
+	"github.com/batreeon/codecrafters-redis-go/util"
 )
 
 type cmdExecutor func(cmds []string) ([]string, []byte, error)

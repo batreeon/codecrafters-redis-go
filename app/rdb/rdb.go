@@ -1,8 +1,8 @@
 package rdb
 
 import (
-	"github.com/codecrafters-io/redis-starter-go/app/storage"
-	"github.com/codecrafters-io/redis-starter-go/constant"
+	"github.com/batreeon/codecrafters-redis-go/app/storage"
+	"github.com/batreeon/codecrafters-redis-go/constant"
 )
 
 const (

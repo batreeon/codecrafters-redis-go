@@ -5,7 +5,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/codecrafters-io/redis-starter-go/app/config"
+	"github.com/batreeon/codecrafters-redis-go/app/config"
 )
 
 func Load() error {
