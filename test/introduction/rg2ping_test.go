@@ -1,4 +1,4 @@
-package introduction_test
+package introduction
 
 import (
 	"testing"
