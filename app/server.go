@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/batreeon/codecrafters-redis-go/app/config"
+	"github.com/batreeon/codecrafters-redis-go/app/rdb"
 	"github.com/batreeon/codecrafters-redis-go/app/server"
 )
 
@@ -13,6 +14,7 @@ func main() {
 	fmt.Println("Logs from your program will appear here!")
 
 	config.SetConfigs()
+	rdb.Load()
 	err := server.StartServer()
 	if err != nil {
 		fmt.Println("err: ", err)

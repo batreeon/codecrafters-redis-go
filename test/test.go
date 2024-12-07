@@ -3,17 +3,13 @@ package test
 import (
 	"flag"
 	"net"
+	"os"
 	"reflect"
 	"testing"
 
 	"github.com/batreeon/codecrafters-redis-go/app/config"
 	"github.com/batreeon/codecrafters-redis-go/app/server"
 )
-
-// 在测试前设置模拟的命令行参数
-func init() {
-	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
-}
 
 type Test struct {
 	Name    string
@@ -22,8 +18,17 @@ type Test struct {
 	Want    []string
 }
 
-func TestServer(t *testing.T) {
+func SetConfig(tt Test) {
+	flag.CommandLine = flag.NewFlagSet("", flag.ExitOnError)
+	// 使用 mockArgs 来替换 os.Args
+	oldArgs := os.Args
+	os.Args = tt.CmdArgs
+	defer func() { os.Args = oldArgs }()
+
 	config.SetConfigs()
+}
+
+func TestServer(t *testing.T) {
 	err := server.StartServer()
 	if err != nil {
 		t.Errorf("failed to start server, err: %v", err)

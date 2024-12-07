@@ -16,10 +16,10 @@ func Test_PING(t *testing.T) {
 			Want:    []string{"+PONG\r\n"},
 		},
 	}
+
+	go test.TestServer(t)
 	for _, tt := range tests {
 		t.Run(tt.Name, func(t *testing.T) {
-			go test.TestServer(t)
-
 			// waiting server start up
 			time.Sleep(1 * time.Second)
 

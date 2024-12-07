@@ -22,19 +22,6 @@ var cmdExecutorMap = map[string]cmdExecutor{
 	"keys":   keysExecutor,
 }
 
-func buildBulkStrings(s string) []byte {
-	return []byte(fmt.Sprintf(constant.BulkStrings, len(s), s))
-}
-
-func buildArrays(s []string) []byte {
-	head := fmt.Sprintf(constant.Arrays, len(s))
-	var elements []byte
-	for _, ss := range s {
-		elements = append(elements, buildBulkStrings(ss)...)
-	}
-	return append([]byte(head), elements...)
-}
-
 func pingExecutor(cmds []string) ([]string, []byte, error) {
 	cmds = util.RemoveFirstNElements(cmds, 1)
 	return cmds, []byte(fmt.Sprintf(constant.SimpleStrings, "PONG")), nil
@@ -45,7 +32,7 @@ func echoExecutor(cmds []string) ([]string, []byte, error) {
 		return cmds, nil, constant.ErrParameterMissing
 	}
 
-	resp := buildBulkStrings(cmds[1])
+	resp := util.BuildBulkStrings(cmds[1])
 	cmds = util.RemoveFirstNElements(cmds, 2)
 	return cmds, resp, nil
 }
@@ -70,7 +57,7 @@ func setExecutor(cmds []string) ([]string, []byte, error) {
 	}
 	storage.SetWithExpire(k, v, expireTime)
 
-	resp := buildBulkStrings("OK")
+	resp := util.BuildSimpleStrings("OK")
 	return cmds, resp, nil
 }
 
@@ -83,7 +70,7 @@ func getExecutor(cmds []string) ([]string, []byte, error) {
 	v := storage.Get(k)
 	var resp []byte
 	if v != constant.NullBulkStrings {
-		resp = buildBulkStrings(v)
+		resp = util.BuildBulkStrings(v)
 	} else {
 		resp = []byte(v)
 	}
@@ -98,7 +85,7 @@ func configExecutor(cmds []string) ([]string, []byte, error) {
 	if cmds[1] == "get" {
 		configKey := cmds[2]
 		configValue := config.GetConfig(configKey)
-		resp := buildArrays([]string{configKey, configValue})
+		resp := util.BuildArrays([]string{configKey, configValue})
 		cmds = util.RemoveFirstNElements(cmds, 3)
 		return cmds, resp, nil
 	}
@@ -112,7 +99,7 @@ func keysExecutor(cmds []string) ([]string, []byte, error) {
 
 	if cmds[1] == "*" {
 		keys := storage.Keys()
-		resp := buildArrays(keys)
+		resp := util.BuildArrays(keys)
 		cmds = util.RemoveFirstNElements(cmds, 2)
 		return cmds, resp, nil
 	}
