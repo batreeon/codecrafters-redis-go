@@ -13,8 +13,8 @@ func TestConfig(t *testing.T) {
 		{
 			Name:    "0",
 			CmdArgs: []string{"program", "--dir", "/tmp/redis-files", "--dbfilename", "dump.rdb"},
-			Args:    []string{"*3\r\n$6\r\nCONFIG\r\n$3\r\nGET\r\n$3\r\ndir\r\n"},
-			Want:    []string{"*2\r\n$3\r\ndir\r\n$16\r\n/tmp/redis-files\r\n"},
+			Args:    []string{"*3\r\n$6\r\nCONFIG\r\n$3\r\nGET\r\n$3\r\ndir\r\n", "*3\r\n$6\r\nCONFIG\r\n$3\r\nGET\r\n$10\r\ndbfilename\r\n"},
+			Want:    []string{"*2\r\n$3\r\ndir\r\n$16\r\n/tmp/redis-files\r\n","*2\r\n$10\r\ndbfilename\r\n$8\r\ndump.rdb\r\n"},
 		},
 	}
 	for _, tt := range tests {
